@@ -1,0 +1,29 @@
+{
+  "name": "boot_dev_pokedex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bwhenry99/boot_dev_pokedex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bwhenry99/boot_dev_pokedex/issues"
+  },
+  "homepage": "https://github.com/bwhenry99/boot_dev_pokedex#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/main.js",
+    "dev": "npx tsc && node dist/main.js",
+    "test": "vitest --run"
+  }
+}
