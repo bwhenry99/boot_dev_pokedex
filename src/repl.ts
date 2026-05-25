@@ -1,5 +1,7 @@
 import * as readline from "node:readline/promises";
 import { stdin, stdout} from "node:process"
+import * as cliCommands from "./cli_commands.js"
+import { recordArtifact } from "vitest";
 
 export function cleanInput(input: string): string[]
 {
@@ -33,8 +35,17 @@ export function startREPL()
             replInterface.prompt();
         }
         else {
-            console.log(`Your command was: ${clean[0]}`);
-            replInterface.prompt();
+            const commands = cliCommands.getCommands();
+            if(commands[clean[0]])
+            {
+                commands[clean[0]].callback(commands);
+                replInterface.prompt();
+            }
+            else
+            {
+                console.log("Unknown commnad")
+                replInterface.prompt();
+            }
         }
     });
 }
