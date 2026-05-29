@@ -1,38 +1,46 @@
+import { PokeAPI } from "./pokeapi.js";
+import {State} from "./state.js"
 
-export type CLICommand = {
-    name: string;
-    description: string;
-    callback: (commands: Record<string, CLICommand>) => void;
-}
-
-export function getCommands(): Record<string, CLICommand>
-{
-    return {
-        exit: {
-            name: "exit",
-            description: "Exit the Pokedex",
-            callback: commandExit
-        },
-        help: {
-            name: "help",
-            description: "Displays a help message",
-            callback: commandHelp
-        }
-    };
-}
-
-export function commandExit()
+export async function commandExit()
 {
     console.log("Closing the Pokedex... Goodbye!");
     process.exit(0);
 }
 
-export function commandHelp()
+export async function commandHelp(state: State)
 {
     console.log("Welcome to the Pokedex!\nUsage:\n");
-    const commands = getCommands()
-    for(const command in commands)
+    for(const cmd in state.commands)
     {
-        console.log(`${commands[command].name}: ${commands[command].description}`)
+        console.log(`${state.commands[cmd].name}: ${state.commands[cmd].description}`)
+    }
+}
+
+export async function commandMap(state: State)
+{
+    const locations = await state.api.fetchLocations(state.nextLocationsURL);
+    state.prevLocationsURL = locations.previous;
+    state.nextLocationsURL = locations.next;
+
+    for(const location of locations.results)
+    {
+        console.log(location.name);
+    }
+}
+
+export async function commandMapb(state: State)
+{
+    if(!state.prevLocationsURL)
+    {
+        console.log("you're on the first page");
+        return;
+    }
+    const locations = await state.api.fetchLocations(state.prevLocationsURL);
+    state.prevLocationsURL = locations.previous;
+    state.nextLocationsURL = locations.next;
+
+    for(const location of locations.results)
+    {
+        console.log(location.name);
     }
 }

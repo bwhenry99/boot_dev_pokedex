@@ -1,7 +1,5 @@
-import * as readline from "node:readline/promises";
-import { stdin, stdout} from "node:process"
 import * as cliCommands from "./cli_commands.js"
-import { recordArtifact } from "vitest";
+import {State} from "./state.js"
 
 export function cleanInput(input: string): string[]
 {
@@ -20,31 +18,32 @@ export function cleanInput(input: string): string[]
     return cleanWords;
 }
 
-export function startREPL()
+export function startREPL(state: State)
 {
-    const replInterface = readline.createInterface({
-        input: stdin,
-        output: stdout,
-        prompt: "Pokedex > "
-    });
-
-    replInterface.prompt();
-    replInterface.on("line", (input) => {
+    state.interface.prompt();
+    state.interface.on("line", async (input) => {
         const clean = cleanInput(input);
         if(!input) {
-            replInterface.prompt();
+            state.interface.prompt();
         }
         else {
-            const commands = cliCommands.getCommands();
-            if(commands[clean[0]])
+            if(state.commands[clean[0]])
             {
-                commands[clean[0]].callback(commands);
-                replInterface.prompt();
+                try{
+                await state.commands[clean[0]].callback(state);
+                state.interface.prompt();
+                }
+                catch(error) {
+                    if(error instanceof Error) {
+                        console.log(error.message);
+                    }
+                }
+                
             }
             else
             {
-                console.log("Unknown commnad")
-                replInterface.prompt();
+                console.log("Unknown command")
+                state.interface.prompt();
             }
         }
     });
