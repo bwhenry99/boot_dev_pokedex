@@ -73,3 +73,36 @@ export async function commandCatch(state: State, args: string[])
         console.log(`${args[1]} escaped!`);
     }
 }
+
+export async function commandInspect(state: State, args: string[])
+{
+    const pokemon = state.pokedex[args[1]];
+
+    if(!pokemon)
+    {
+        console.log("you have not caught that pokemon");
+        return;
+    }
+    let pokeStats: Record<string, number> = {};
+    for(const stat of pokemon.stats)
+    {
+        pokeStats[stat.stat.name] = stat.base_stat;
+    }
+
+    console.log(`Name: ${pokemon.name}`);
+    console.log(`Height: ${pokemon.height}`);
+    console.log(`Weight: ${pokemon.weight}`);
+    console.log("Stats:");
+    console.log(`   -hp: ${pokeStats["hp"]}`);
+    console.log(`   -attack: ${pokeStats["attack"]}`);
+    console.log(`   -defense: ${pokeStats["defense"]}`);
+    console.log(`   -special-attack: ${pokeStats["special-attack"]}`);
+    console.log(`   -special-defense: ${pokeStats["special-defense"]}`);
+    console.log(`   -speed: ${pokeStats["speed"]}`);
+    console.log("Types:");
+    for(const type of pokemon.types)
+    {
+        console.log(`   - ${type.type.name}`)
+    }
+
+}

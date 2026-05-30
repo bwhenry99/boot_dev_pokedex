@@ -64,5 +64,10 @@ export function getCommands(): Record<string, CLICommand>
             description: "Attmpt to catch a pokemon",
             callback: cli_commands.commandCatch
         },
+        inspect: {
+            name: "inspect",
+            description: "Inspect pokedex entry",
+            callback: cli_commands.commandInspect
+        },
     };
 }
