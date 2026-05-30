@@ -1,16 +1,24 @@
 import { get } from "node:http";
-import { AsymmetricMatchersContaining } from "vitest";
+import { Cache } from "./pokecache.js";
 
 export class PokeAPI {
   private static readonly baseURL = "https://pokeapi.co/api/v2";
+  cache: Cache =  new Cache(30000);
 
   constructor() {}
 
   async fetchLocations(pageURL?: string): Promise<ShallowLocations> {
     if(pageURL)
     {
+      const cached = this.cache.get(pageURL);
+      if(cached)
+      {
+        return cached;
+      }
       const response = fetch(pageURL);
-      return (await response).json();
+      const result = (await response).json()
+      this.cache.add(pageURL, result)
+      return result;
     }
     const response = fetch(`${PokeAPI.baseURL}/location-area/`);
     return (await response).json();
