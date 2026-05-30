@@ -30,7 +30,7 @@ export function startREPL(state: State)
             if(state.commands[clean[0]])
             {
                 try{
-                await state.commands[clean[0]].callback(state);
+                await state.commands[clean[0]].callback(state, clean);
                 state.interface.prompt();
                 }
                 catch(error) {

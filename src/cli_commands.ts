@@ -44,3 +44,32 @@ export async function commandMapb(state: State)
         console.log(location.name);
     }
 }
+
+export async function commandExplore(state: State, args: string[])
+{
+    const data = await state.api.fetchLocation(args[1]);
+    console.log(`Exploring ${args[1]}...`);
+    console.log("Found Pokemon:")
+    for (const pokemon of data.pokemon_encounters)
+    {
+        console.log(`- ${pokemon.pokemon.name}`);
+    }
+}
+
+export async function commandCatch(state: State, args: string[])
+{
+    const pokemon = await state.api.fetchPokemon(args[1]);
+    console.log(`Throwing a Pokeball at ${args[1]}...`);
+    
+    const roll = Math.floor(Math.random() * 400);
+
+    if(roll >  pokemon.base_experience)
+    {
+        console.log(`${args[1]} was caught!`);
+        state.pokedex[args[1]] = pokemon;
+    }
+    else
+    {
+        console.log(`${args[1]} escaped!`);
+    }
+}
