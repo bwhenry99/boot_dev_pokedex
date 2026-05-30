@@ -83,6 +83,7 @@ export async function commandInspect(state: State, args: string[])
         console.log("you have not caught that pokemon");
         return;
     }
+
     let pokeStats: Record<string, number> = {};
     for(const stat of pokemon.stats)
     {
@@ -104,5 +105,13 @@ export async function commandInspect(state: State, args: string[])
     {
         console.log(`   - ${type.type.name}`)
     }
+}
 
+export async function commandPokedex(state: State)
+{
+    console.log("Your Pokedex:");
+    for(const poke in state.pokedex)
+    {
+        console.log(`   - ${poke}`);
+    }
 }

@@ -69,5 +69,10 @@ export function getCommands(): Record<string, CLICommand>
             description: "Inspect pokedex entry",
             callback: cli_commands.commandInspect
         },
+        pokedex: {
+            name: "pokedex",
+            description: "Show all caught pokemon",
+            callback: cli_commands.commandPokedex
+        },
     };
 }
